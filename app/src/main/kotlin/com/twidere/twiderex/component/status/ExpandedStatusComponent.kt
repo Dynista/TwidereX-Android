@@ -143,6 +143,7 @@ fun ExpandedStatusComponent(
                     ReplyButton(status = status, withNumber = false)
                     RetweetButton(status = status, withNumber = false)
                     LikeButton(status = status, withNumber = false)
+                    CopyLinkButton(status = status, withNumber = false)
                     ShareButton(status = status)
                     Spacer(modifier = Modifier.weight(1f))
                 }

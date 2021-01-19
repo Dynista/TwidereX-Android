@@ -54,7 +54,6 @@ fun StatusMediaComponent(
         val first = media.first()
         Box(
             modifier = Modifier
-                .heightIn(max = 400.dp)
                 .aspectRatio(first.width.toFloat() / first.height.toFloat())
                 .clip(MaterialTheme.shapes.medium)
         ) {

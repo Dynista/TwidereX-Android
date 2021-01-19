@@ -93,10 +93,10 @@ fun TimelineStatusComponent(
                 ) {
                     Spacer(modifier = Modifier.height(standardPadding))
                     Row {
-                        Spacer(modifier = Modifier.width(profileImageSize))
                         ReplyButton(status = status)
                         RetweetButton(status = status)
                         LikeButton(status = status)
+                        CopyLinkButton(status = status)
                         ShareButton(status = status, compat = true)
                     }
                 }
@@ -114,106 +114,108 @@ private fun StatusComponent(
 ) {
     val navigator = AmbientNavigator.current
     val isMediaPreviewEnabled = AmbientDisplayPreferences.current.mediaPreview
-    Row(modifier = modifier) {
-        UserAvatar(user = status.user)
-        Spacer(modifier = Modifier.width(standardPadding))
-        Column {
-            Row {
-                Row(
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(
-                        text = status.user.name,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Providers(
-                        AmbientContentAlpha provides ContentAlpha.medium
+    Column {
+        Row(modifier = modifier) {
+            UserAvatar(user = status.user)
+            Spacer(modifier = Modifier.width(standardPadding))
+            Column {
+                Row {
+                    Column(
+                            modifier = Modifier.weight(1f)
                     ) {
                         Text(
-                            text = "@${status.user.screenName}",
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
+                                text = status.user.name,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
                         )
+                        Providers(AmbientContentAlpha provides ContentAlpha.medium) {
+                            Text(
+                                    text = "@${status.user.screenName}",
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                            )
+                        }
+                    }
+                    HumanizedTime(time = status.timestamp)
+                }
+            }
+        }
+        Row(modifier = modifier) {
+            Column {
+                Spacer(modifier = Modifier.height(4.dp))
+
+                StatusText(status = status, onStatusTextClicked = onStatusTextClicked)
+
+                if (status.media.any()) {
+                    Spacer(modifier = Modifier.height(standardPadding))
+                    if (isMediaPreviewEnabled) {
+                        StatusMediaComponent(
+                                status = status,
+                        )
+                    } else {
+                        Providers(
+                                AmbientContentAlpha provides ContentAlpha.medium
+                        ) {
+                            Row(
+                                    modifier = Modifier
+                                            .clickable(
+                                                    onClick = {
+                                                        navigator.media(statusKey = status.statusKey)
+                                                    }
+                                            )
+                                            .fillMaxWidth()
+                            ) {
+                                Icon(imageVector = vectorResource(id = R.drawable.ic_photo))
+                                Spacer(modifier = Modifier.width(standardPadding))
+                                Text(text = stringResource(id = R.string.common_controls_status_media))
+                            }
+                        }
                     }
                 }
-                HumanizedTime(time = status.timestamp)
-            }
 
-            Spacer(modifier = Modifier.height(4.dp))
-
-            StatusText(status = status, onStatusTextClicked = onStatusTextClicked)
-
-            if (status.media.any()) {
-                Spacer(modifier = Modifier.height(standardPadding))
-                if (isMediaPreviewEnabled) {
-                    StatusMediaComponent(
-                        status = status,
-                    )
-                } else {
+                if (!status.placeString.isNullOrEmpty()) {
+                    Spacer(modifier = Modifier.height(standardPadding))
                     Providers(
-                        AmbientContentAlpha provides ContentAlpha.medium
+                            AmbientContentAlpha provides ContentAlpha.medium
                     ) {
                         Row(
-                            modifier = Modifier
-                                .clickable(
-                                    onClick = {
-                                        navigator.media(statusKey = status.statusKey)
-                                    }
-                                )
-                                .fillMaxWidth()
+                                verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Icon(imageVector = vectorResource(id = R.drawable.ic_photo))
-                            Spacer(modifier = Modifier.width(standardPadding))
-                            Text(text = stringResource(id = R.string.common_controls_status_media))
+                            Icon(
+                                    modifier = Modifier.size(statusActionIconSize),
+                                    imageVector = vectorResource(id = R.drawable.ic_map_pin)
+                            )
+                            Box(modifier = Modifier.width(standardPadding))
+                            Text(text = status.placeString)
                         }
                     }
                 }
-            }
 
-            if (!status.placeString.isNullOrEmpty()) {
-                Spacer(modifier = Modifier.height(standardPadding))
-                Providers(
-                    AmbientContentAlpha provides ContentAlpha.medium
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
+                if (status.quote != null) {
+                    Spacer(modifier = Modifier.height(standardPadding))
+                    Box(
+                            modifier = Modifier
+                                    .border(
+                                            1.dp,
+                                            AmbientContentColor.current.copy(alpha = 0.12f),
+                                            MaterialTheme.shapes.medium
+                                    )
+                                    .clip(MaterialTheme.shapes.medium)
                     ) {
-                        Icon(
-                            modifier = Modifier.size(statusActionIconSize),
-                            imageVector = vectorResource(id = R.drawable.ic_map_pin)
-                        )
-                        Box(modifier = Modifier.width(standardPadding))
-                        Text(text = status.placeString)
-                    }
-                }
-            }
-
-            if (status.quote != null) {
-                Spacer(modifier = Modifier.height(standardPadding))
-                Box(
-                    modifier = Modifier
-                        .border(
-                            1.dp,
-                            AmbientContentColor.current.copy(alpha = 0.12f),
-                            MaterialTheme.shapes.medium
-                        )
-                        .clip(MaterialTheme.shapes.medium)
-                ) {
-                    StatusComponent(
-                        status = status.quote,
-                        modifier = Modifier
-                            .clickable(
-                                onClick = {
+                        StatusComponent(
+                                status = status.quote,
+                                modifier = Modifier
+                                        .clickable(
+                                                onClick = {
+                                                    navigator.status(statusKey = status.quote.statusKey)
+                                                }
+                                        )
+                                        .padding(standardPadding),
+                                onStatusTextClicked = {
                                     navigator.status(statusKey = status.quote.statusKey)
                                 }
-                            )
-                            .padding(standardPadding),
-                        onStatusTextClicked = {
-                            navigator.status(statusKey = status.quote.statusKey)
-                        }
-                    )
+                        )
+                    }
                 }
             }
         }

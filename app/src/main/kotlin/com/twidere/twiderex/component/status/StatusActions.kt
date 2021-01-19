@@ -178,6 +178,44 @@ fun RetweetButton(
 }
 
 @Composable
+fun CopyLinkButton(
+        status: UiStatus,
+        withNumber: Boolean = true,
+) {
+    val clipboardManager = AmbientClipboardManager.current
+    val color = mediumEmphasisContentContentColor
+    val icon = vectorResource(id = R.drawable.ic_share)
+    val action = {
+        clipboardManager.setText(
+                buildAnnotatedString {
+                    append(status.generateShareLink())
+                }
+        )
+    }
+    if (withNumber) {
+        StatusActionButtonWithNumbers(
+                icon = icon,
+                count = 0,
+                color = color,
+                onClick = {
+                    action.invoke()
+                },
+        )
+    } else {
+        ActionIconButton(
+                onClick = {
+                    action.invoke()
+                },
+        ) {
+            Icon(
+                    imageVector = icon,
+                    tint = color,
+            )
+        }
+    }
+}
+
+@Composable
 fun ShareButton(
     status: UiStatus,
     compat: Boolean = false,
