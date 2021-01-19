@@ -182,6 +182,17 @@ fun DisplayScene() {
                         }
                     )
                 }
+
+                itemDivider()
+                switchItem(
+                        value = display.showTextOnlyTweets,
+                        onChanged = {
+                            viewModel.setShowTextOnlyTweets(it)
+                        },
+                        title = {
+                            Text(text = stringResource(id = R.string.scene_settings_show_text_only_tweets))
+                        }
+                )
             }
         }
     }

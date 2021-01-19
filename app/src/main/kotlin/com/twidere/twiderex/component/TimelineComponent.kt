@@ -54,6 +54,7 @@ import com.twidere.twiderex.component.lazy.loadState
 import com.twidere.twiderex.component.status.StatusDivider
 import com.twidere.twiderex.component.status.TimelineStatusComponent
 import com.twidere.twiderex.extensions.refreshOrRetry
+import com.twidere.twiderex.preferences.AmbientDisplayPreferences
 import com.twidere.twiderex.ui.standardPadding
 import com.twidere.twiderex.viewmodel.timeline.TimelineScrollState
 import com.twidere.twiderex.viewmodel.timeline.TimelineViewModel
@@ -98,43 +99,45 @@ fun TimelineComponent(viewModel: TimelineViewModel) {
                 state = listState
             ) {
                 itemsIndexed(items) { index, it ->
-                    it?.let { item ->
-                        Column {
-                            TimelineStatusComponent(
-                                item,
-                            )
-                            when {
-                                loadingBetween.contains(item.statusKey) -> {
-                                    Divider()
-                                    LoadingProgress()
-                                    Divider()
-                                }
-                                item.isGap -> {
-                                    Divider()
-                                    TextButton(
-                                        modifier = Modifier
-                                            .defaultMinSizeConstraints(
-                                                minHeight = ButtonDefaults.MinHeight,
-                                            )
-                                            .padding(ButtonDefaults.ContentPadding)
-                                            .fillMaxWidth(),
-                                        onClick = {
-                                            items[index + 1]?.let { next ->
-                                                viewModel.loadBetween(
-                                                    item.statusKey,
-                                                    next.statusKey,
-                                                )
-                                            }
-                                        },
-                                    ) {
-                                        Icon(imageVector = vectorResource(id = R.drawable.ic_refresh))
-                                        Box(modifier = Modifier.width(standardPadding))
-                                        Text(text = stringResource(id = R.string.common_controls_timeline_load_more))
+                    if (AmbientDisplayPreferences.current.showTextOnlyTweets || it?.hasMedia == true) {
+                        it?.let { item ->
+                            Column {
+                                TimelineStatusComponent(
+                                        item,
+                                )
+                                when {
+                                    loadingBetween.contains(item.statusKey) -> {
+                                        Divider()
+                                        LoadingProgress()
+                                        Divider()
                                     }
-                                    Divider()
-                                }
-                                else -> {
-                                    StatusDivider()
+                                    item.isGap -> {
+                                        Divider()
+                                        TextButton(
+                                                modifier = Modifier
+                                                        .defaultMinSizeConstraints(
+                                                                minHeight = ButtonDefaults.MinHeight,
+                                                        )
+                                                        .padding(ButtonDefaults.ContentPadding)
+                                                        .fillMaxWidth(),
+                                                onClick = {
+                                                    items[index + 1]?.let { next ->
+                                                        viewModel.loadBetween(
+                                                                item.statusKey,
+                                                                next.statusKey,
+                                                        )
+                                                    }
+                                                },
+                                        ) {
+                                            Icon(imageVector = vectorResource(id = R.drawable.ic_refresh))
+                                            Box(modifier = Modifier.width(standardPadding))
+                                            Text(text = stringResource(id = R.string.common_controls_timeline_load_more))
+                                        }
+                                        Divider()
+                                    }
+                                    else -> {
+                                        StatusDivider()
+                                    }
                                 }
                             }
                         }

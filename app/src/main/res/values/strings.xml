@@ -194,6 +194,7 @@
     <string name="scene_settings_display_date_format_relative">Relative</string>
     <string name="scene_settings_display_date_format_absolute">Absolute</string>
     <string name="scene_settings_display_media_media_previews">Media previews</string>
+    <string name="scene_settings_show_text_only_tweets">Show text only tweets</string>
     <string name="scene_settings_display_media_auto_playback">Auto playback</string>
     <string name="scene_settings_display_media_automatic">Automatic</string>
     <string name="scene_settings_display_media_always">Always</string>
