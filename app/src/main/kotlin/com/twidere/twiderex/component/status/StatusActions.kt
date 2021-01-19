@@ -20,6 +20,8 @@
  */
 package com.twidere.twiderex.component.status
 
+import android.app.Application
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -51,6 +53,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import com.twidere.twiderex.R
+import com.twidere.twiderex.TwidereApp
 import com.twidere.twiderex.action.AmbientStatusActions
 import com.twidere.twiderex.component.foundation.ActionIconButton
 import com.twidere.twiderex.component.navigation.AmbientNavigator
@@ -61,6 +64,7 @@ import com.twidere.twiderex.ui.AmbientActiveAccount
 import com.twidere.twiderex.ui.mediumEmphasisContentContentColor
 import com.twidere.twiderex.ui.statusActionIconSize
 import com.twidere.twiderex.viewmodel.compose.ComposeType
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 @Composable
 fun ReplyButton(
@@ -185,12 +189,15 @@ fun CopyLinkButton(
     val clipboardManager = AmbientClipboardManager.current
     val color = mediumEmphasisContentContentColor
     val icon = vectorResource(id = R.drawable.ic_share)
+    val context = AmbientContext.current
     val action = {
         clipboardManager.setText(
                 buildAnnotatedString {
                     append(status.generateShareLink())
                 }
         )
+
+        Toast.makeText(context, "Copied link to clipboard", Toast.LENGTH_SHORT).show()
     }
     if (withNumber) {
         StatusActionButtonWithNumbers(
