@@ -41,6 +41,7 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.unit.Density
+import com.twidere.twiderex.ui.AmbientNavController
 import kotlin.math.roundToInt
 
 /**
@@ -139,6 +140,7 @@ fun Pager(
     content: @Composable PagerScope.() -> Unit
 ) {
     var pageSize by remember { mutableStateOf(0) }
+    val navController = AmbientNavController.current
     Layout(
         content = {
             val minPage = (state.currentPage - offscreenLimit).coerceAtLeast(state.minPage)
@@ -173,6 +175,17 @@ fun Pager(
                 val newPos = (pos + dy).coerceIn(min.toFloat(), max.toFloat())
                 currentPageOffset = newPos / pageSize
             }
+        }.draggable(
+                enabled = true,
+                orientation = Orientation.Vertical,
+                onDragStarted = {
+                    state.selectionState = PagerState.SelectionState.Undecided
+                },
+                onDragStopped = {
+                    navController.popBackStack()
+                }
+        ) {
+            // TODO: Make animation for exit swipe
         }
     ) { measurables, constraints ->
         layout(constraints.maxWidth, constraints.maxHeight) {
