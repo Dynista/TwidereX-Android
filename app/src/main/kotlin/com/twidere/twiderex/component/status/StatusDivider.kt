@@ -31,7 +31,7 @@ import com.twidere.twiderex.ui.standardPadding
 fun StatusDivider() {
     Divider(
         modifier = Modifier.padding(
-            start = profileImageSize + standardPadding * 3,
+            start = standardPadding * 2,
             end = standardPadding * 2
         )
     )
