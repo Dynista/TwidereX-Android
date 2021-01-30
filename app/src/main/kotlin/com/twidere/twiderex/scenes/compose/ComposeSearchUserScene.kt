@@ -84,7 +84,7 @@ fun ComposeSearchUserScene() {
                             TextInput(
                                 value = text,
                                 onValueChange = {
-                                    viewModel.text.postValue(it)
+                                    viewModel.text.value = it
                                 },
                                 maxLines = 1,
                                 placeholder = {
@@ -110,7 +110,12 @@ fun ComposeSearchUserScene() {
                                 navController.popBackStack()
                             }
                         ) {
-                            Icon(imageVector = Icons.Default.Done)
+                            Icon(
+                                imageVector = Icons.Default.Done,
+                                contentDescription = stringResource(
+                                    id = R.string.accessibility_common_done
+                                )
+                            )
                         }
                     },
                 )

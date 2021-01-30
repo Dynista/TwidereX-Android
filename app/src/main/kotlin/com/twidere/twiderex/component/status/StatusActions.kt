@@ -73,6 +73,7 @@ fun ReplyButton(
 ) {
     val navigator = AmbientNavigator.current
     val icon = vectorResource(id = R.drawable.ic_corner_up_left)
+    val contentDescription = stringResource(id = R.string.accessibility_common_status_actions_reply)
     val action = {
         navigator.compose(ComposeType.Reply, statusKey = status.statusKey)
     }
@@ -81,6 +82,7 @@ fun ReplyButton(
             icon = icon,
             color = mediumEmphasisContentContentColor,
             count = status.replyCount,
+            contentDescription = contentDescription,
             onClick = {
                 action.invoke()
             },
@@ -94,6 +96,7 @@ fun ReplyButton(
             Icon(
                 imageVector = icon,
                 tint = mediumEmphasisContentContentColor,
+                contentDescription = contentDescription,
             )
         }
     }
@@ -111,6 +114,7 @@ fun LikeButton(
     } else {
         mediumEmphasisContentContentColor
     }
+    val contentDescription = stringResource(id = R.string.accessibility_common_status_actions_like)
     val icon = vectorResource(id = R.drawable.ic_heart)
     val action = {
         if (account != null) {
@@ -122,6 +126,7 @@ fun LikeButton(
             icon = icon,
             count = status.likeCount,
             color = color,
+            contentDescription = contentDescription,
             onClick = {
                 action.invoke()
             },
@@ -135,6 +140,7 @@ fun LikeButton(
             Icon(
                 imageVector = icon,
                 tint = color,
+                contentDescription = contentDescription,
             )
         }
     }
@@ -153,6 +159,7 @@ fun RetweetButton(
         mediumEmphasisContentContentColor
     }
     val icon = vectorResource(id = R.drawable.ic_repeat)
+    val contentDescription = stringResource(id = R.string.accessibility_common_status_actions_retweet)
     val action = {
         if (account != null) {
             actionsViewModel.retweet(status, account)
@@ -163,6 +170,7 @@ fun RetweetButton(
             icon = icon,
             count = status.retweetCount,
             color = color,
+            contentDescription = contentDescription,
             onClick = {
                 action.invoke()
             },
@@ -176,6 +184,7 @@ fun RetweetButton(
             Icon(
                 imageVector = icon,
                 tint = color,
+                contentDescription = contentDescription,
             )
         }
     }
@@ -235,6 +244,7 @@ fun ShareButton(
     val icon = Icons.Default.MoreHoriz
     val text = status.contentAnnotatedString()
     val clipboardManager = AmbientClipboardManager.current
+    val contentDescription = stringResource(id = R.string.accessibility_common_more)
     val child = @Composable {
         if (compat) {
             TextButton(
@@ -248,6 +258,7 @@ fun ShareButton(
                 Icon(
                     modifier = Modifier.size(statusActionIconSize),
                     imageVector = icon,
+                    contentDescription = contentDescription,
                 )
             }
         } else {
@@ -259,6 +270,7 @@ fun ShareButton(
                 Icon(
                     imageVector = icon,
                     tint = mediumEmphasisContentContentColor,
+                    contentDescription = contentDescription,
                 )
             }
         }
@@ -323,6 +335,7 @@ fun ShareButton(
 private fun StatusActionButtonWithNumbers(
     modifier: Modifier = Modifier,
     icon: ImageVector,
+    contentDescription: String,
     count: Long,
     color: Color = AmbientContentColor.current,
     onClick: () -> Unit,
@@ -341,6 +354,7 @@ private fun StatusActionButtonWithNumbers(
                 modifier = Modifier.size(statusActionIconSize),
                 imageVector = icon,
                 tint = color,
+                contentDescription = contentDescription
             )
             if (count > 0) {
                 Box(modifier = Modifier.width(4.dp))

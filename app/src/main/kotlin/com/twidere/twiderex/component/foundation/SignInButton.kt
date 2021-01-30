@@ -39,6 +39,7 @@ import androidx.compose.ui.semantics.Role
 fun SignInButton(
     border: BorderStroke? = null,
     color: Color = MaterialTheme.colors.primary,
+    contentColor: Color = contentColorFor(color = color),
     onClick: () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
@@ -50,8 +51,9 @@ fun SignInButton(
                 role = Role.Button,
                 onClick = onClick,
             ),
+        shape = MaterialTheme.shapes.small,
         border = border,
-        contentColor = contentColorFor(color = color),
+        contentColor = contentColor,
         color = color,
     ) {
         Row(

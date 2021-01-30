@@ -182,8 +182,10 @@ private fun StatusComponent(
                                 verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Icon(
-                                    modifier = Modifier.size(statusActionIconSize),
-                                    imageVector = vectorResource(id = R.drawable.ic_map_pin)
+                                imageVector = vectorResource(id = R.drawable.ic_photo),
+                                contentDescription = stringResource(
+                                    id = R.string.accessibility_common_status_media
+                                )
                             )
                             Box(modifier = Modifier.width(standardPadding))
                             Text(text = status.placeString)
