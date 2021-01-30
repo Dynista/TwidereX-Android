@@ -199,6 +199,7 @@ fun CopyLinkButton(
     val color = mediumEmphasisContentContentColor
     val icon = vectorResource(id = R.drawable.ic_share)
     val context = AmbientContext.current
+    val contentDescription = stringResource(id = R.string.accessibility_common_status_actions_copy_link)
     val action = {
         clipboardManager.setText(
                 buildAnnotatedString {
@@ -216,6 +217,7 @@ fun CopyLinkButton(
                 onClick = {
                     action.invoke()
                 },
+                contentDescription = contentDescription
         )
     } else {
         ActionIconButton(
@@ -226,6 +228,7 @@ fun CopyLinkButton(
             Icon(
                     imageVector = icon,
                     tint = color,
+                    contentDescription = contentDescription
             )
         }
     }

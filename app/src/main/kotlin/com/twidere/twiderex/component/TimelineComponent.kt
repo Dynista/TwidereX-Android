@@ -133,7 +133,7 @@ fun TimelineComponent(viewModel: TimelineViewModel) {
                                             Icon(
                                             imageVector = vectorResource(id = R.drawable.ic_refresh),
                                             contentDescription = stringResource(
-                                                id = R.string.accessibility_scene_timeline_load_gap
+                                                id = R.string.accessibility_scene_timeline_load_gap)
                                             )
                                             Box(modifier = Modifier.width(standardPadding))
                                             Text(text = stringResource(id = R.string.common_controls_timeline_load_more))
